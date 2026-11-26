@@ -1,6 +1,7 @@
 package org.example.account;
 
 import org.example.user.User;
+import org.example.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -13,6 +14,7 @@ public class AccountService {
 
     private int idCounter;
     private final Map<Integer, Account> accountsMap;
+    private UserService userService;
 
     private static final String USER_ID = "User id";
     private static final String ACCOUNT_ID = "Account id";
@@ -86,6 +88,11 @@ public class AccountService {
                 accountToTransfer.getMoneyAmount() + accountToClose.getMoneyAmount());
 
         accountsMap.remove(accountId);
+
+        userService.findUserById(accountToClose.getUserId())
+                .getAccountList()
+                .removeIf(account -> account.getId() == accountId);
+
         return accountToTransfer;
     }
 
@@ -116,5 +123,10 @@ public class AccountService {
         Account account = getAccountById(id).orElse(null);
         validateAccountNotNull(account, id);
         return account;
+    }
+
+    @Autowired
+    public void setUserService(UserService userService) {
+        this.userService = userService;
     }
 }

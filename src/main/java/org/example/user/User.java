@@ -31,14 +31,12 @@ public class User {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return id == user.id &&
-                Objects.equals(login, user.login) &&
-                Objects.equals(accountList, user.accountList);
+        return id == user.id;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, login, accountList);
+        return Objects.hash(id);
     }
 
     @Override
